@@ -1,0 +1,14 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE/editor configs
+.vscode/
+.idea/
+
+# Ignore vendor/cache if any
+node_modules/
+vendor/
+
+# Ignore DB configs (replace with sample instead)
+db_connection.php
