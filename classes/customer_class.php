@@ -50,4 +50,19 @@ class Customer {
         }
         return null;
     }
+    public function login($email, $password) {
+    $sql = "SELECT * FROM customer WHERE customer_email = ? LIMIT 1";
+    if ($stmt = $this->conn->prepare($sql)) {
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $customer = $res->fetch_assoc();
+        $stmt->close();
+
+        if ($customer && password_verify($password, $customer['customer_pass'])) {
+            return $customer; // login successful
+        }
+    }
+    return false; // login failed
+}
 }

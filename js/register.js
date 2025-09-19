@@ -39,9 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const res = await fetch('../actions/register_customer_action.php', {
-        method: 'POST',
-        body: formData
+      method: 'POST',
+      body: formData
       });
+
       const data = await res.json();
 
       if (data.status === 'success') {

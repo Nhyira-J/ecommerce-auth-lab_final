@@ -12,7 +12,7 @@
   <div class="navbar">
     <h2>MyShop</h2>
     <div>
-      <a href="index.php">Home</a>
+      <a href="../index.php">Home</a>
       <a href="login.php">Login</a>
     </div>
   </div>

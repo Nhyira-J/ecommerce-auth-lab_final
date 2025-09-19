@@ -1,29 +1,54 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("loginForm");
-  const messageDiv = document.getElementById("loginMessage");
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('loginForm');
+  const msg = document.getElementById('loginMessage');
+  const btn = document.getElementById('loginBtn');
 
-  form.addEventListener("submit", async (e) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    msg.textContent = '';
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
+    const formData = new FormData(form);
+    const email = formData.get('email').trim();
+    const password = formData.get('password');
+
+    // Validation
+    if (!emailRegex.test(email)) {
+      msg.textContent = 'Enter a valid email';
+      return;
+    }
+    if (!password) {
+      msg.textContent = 'Password cannot be empty';
+      return;
+    }
+
+    // Show loading
+    btn.disabled = true;
+    btn.classList.add("loading");
+    btn.textContent = "Logging in...";
 
     try {
-      const response = await fetch("../actions/login_customer_action.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+      const res = await fetch('../actions/login_customer_action.php', {
+        method: 'POST',
+        body: formData
       });
+      const data = await res.json();
 
-      const data = await response.json();
-      messageDiv.textContent = data.message;
+      if (data.status === 'success') {
+    window.location.href = '/mvc_skeleton_template/index.php'; // absolute path to landing page
+    } else {
+    msg.textContent = data.message || 'Login failed';
+    }
 
-      if (data.success) {
-        window.location.href = "../index.php";
-      }
+
     } catch (err) {
-      console.error("Login error:", err);
-      messageDiv.textContent = "Network/server error.";
+      console.error(err);
+      msg.textContent = 'Network/server error. Try again.';
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove("loading");
+      btn.textContent = "Login";
     }
   });
 });

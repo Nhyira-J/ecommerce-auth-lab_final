@@ -1,9 +1,11 @@
 <?php
 // actions/register_customer_action.php
-
 header('Content-Type: application/json');
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
-// includes
+// Includes
+require_once __DIR__ . '/../functions/db.php';
 require_once __DIR__ . '/../controllers/customer_controller.php';
 
 // Collect POST data
@@ -14,14 +16,17 @@ $country         = trim($_POST['country'] ?? '');
 $city            = trim($_POST['city'] ?? '');
 $contact_number  = trim($_POST['contact_number'] ?? '');
 
-// Validation (server-side, in case JS misses anything)
+// Validation
 if (!$full_name || !$email || !$password || !$country || !$city || !$contact_number) {
     echo json_encode(['status' => 'error', 'message' => 'All fields are required']);
     exit;
 }
 
+// Create controller instance
+$controller = new CustomerController($conn);
+
 // Check email uniqueness
-if (get_customer_by_email_ctr($email)) {
+if ($controller->get_customer_by_email_ctr($email)) {
     echo json_encode(['status' => 'error', 'message' => 'Email already exists']);
     exit;
 }
@@ -29,7 +34,7 @@ if (get_customer_by_email_ctr($email)) {
 // Hash password
 $hashed = password_hash($password, PASSWORD_DEFAULT);
 
-// Build data array for model
+// Build data array
 $data = [
     'full_name'      => $full_name,
     'email'          => $email,
@@ -37,12 +42,12 @@ $data = [
     'country'        => $country,
     'city'           => $city,
     'contact_number' => $contact_number,
-    'image'          => null,   // default null
-    'user_role'      => 2       // default customer
+    'image'          => null,
+    'user_role'      => 2
 ];
 
 // Try to insert
-$insertId = register_customer_ctr($data);
+$insertId = $controller->register_customer_ctr($data);
 
 if ($insertId) {
     echo json_encode(['status' => 'success', 'message' => 'Registration successful']);
