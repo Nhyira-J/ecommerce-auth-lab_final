@@ -17,12 +17,19 @@ $controller = new CustomerController($conn);
 $customer = $controller->login_customer_ctr(['email' => $email, 'password' => $password]);
 
 if ($customer) {
-    $_SESSION['user_id'] = $customer['customer_id'];
-    $_SESSION['user_name'] = $customer['customer_name'];
-    $_SESSION['user_email'] = $customer['customer_email'];
-    $_SESSION['user_role'] = $customer['user_role'];
+    // Set session variables consistently with core.php
+    $_SESSION['user_id']   = $customer['customer_id'];
+    $_SESSION['name']      = $customer['customer_name'];
+    $_SESSION['email']     = $customer['customer_email'];
+    $_SESSION['role']      = $customer['user_role'];  // 👈 matches core.php
 
-    echo json_encode(['status' => 'success', 'message' => 'Login successful']);
+    echo json_encode([
+        'status'  => 'success',
+        'message' => 'Login successful'
+    ]);
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid email or password']);
+    echo json_encode([
+        'status'  => 'error',
+        'message' => 'Invalid email or password'
+    ]);
 }
