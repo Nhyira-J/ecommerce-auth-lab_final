@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 header('Content-Type: application/json');
 
@@ -10,11 +13,11 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$id = $_POST['id'] ?? '';
-$newName = $_POST['name'] ?? '';
+$id = intval($_POST['id'] ?? 0);
+$newName = trim($_POST['name'] ?? '');
 $user_id = $_SESSION['user_id'];
 
-if (!$id || !$newName) {
+if ($id <= 0 || empty($newName)) {
     echo json_encode(['status' => 'error', 'message' => 'Invalid input']);
     exit;
 }

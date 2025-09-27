@@ -12,11 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
       data.data.forEach(cat => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${cat.category_id}</td>
-          <td><input type="text" value="${cat.category_name}" data-id="${cat.category_id}"></td>
+          <td>${cat.cat_id}</td>
+          <td><input type="text" value="${cat.cat_name}" data-id="${cat.cat_id}"></td>
           <td>
-            <button class="update-btn" data-id="${cat.category_id}">Update</button>
-            <button class="delete-btn" data-id="${cat.category_id}">Delete</button>
+            <button class="update-btn" data-id="${cat.cat_id}">Update</button>
+            <button class="delete-btn" data-id="${cat.cat_id}">Delete</button>
           </td>
         `;
         tableBody.appendChild(row);

@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 header('Content-Type: application/json');
 
@@ -10,10 +13,10 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$name = $_POST['name'] ?? '';
+$name = trim($_POST['name'] ?? '');
 $user_id = $_SESSION['user_id'];
 
-if (!$name) {
+if (empty($name)) {
     echo json_encode(['status' => 'error', 'message' => 'Category name required']);
     exit;
 }

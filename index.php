@@ -25,8 +25,8 @@ $name = $_SESSION['name'] ?? 'Guest';
         <a href="actions/logout_action.php" class="primary-btn">Logout</a>
 
         <?php if ($role == 1): ?>   <!-- 1 = admin -->
-          <a href="view/admin/category.php" class="primary-btn">Categories</a>
-          <a href="view/admin/products.php" class="primary-btn">Products</a>
+          <a href="admin/category.php" class="primary-btn">Categories</a>
+          <a href="admin/products.php" class="primary-btn">Products</a>
         <?php endif; ?>
 
       <?php else: ?>

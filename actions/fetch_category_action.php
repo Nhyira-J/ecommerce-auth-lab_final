@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 header('Content-Type: application/json');
 
@@ -11,7 +14,12 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
+
 $controller = new CategoryController($conn);
 $categories = $controller->get_categories_ctr($user_id);
 
-echo json_encode(['status' => 'success', 'data' => $categories]);
+if ($categories && count($categories) > 0) {
+    echo json_encode(['status' => 'success', 'data' => $categories]);
+} else {
+    echo json_encode(['status' => 'success', 'data' => []]);
+}

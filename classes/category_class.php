@@ -10,31 +10,35 @@ class Category {
 
     // CREATE
     public function addCategory($name, $user_id) {
-        $query = "INSERT INTO categories (category_name, user_id) VALUES (?, ?)";
+        $query = "INSERT INTO categories (cat_name, user_id) VALUES (?, ?)";
         $stmt = $this->conn->prepare($query);
-        return $stmt->execute([$name, $user_id]);
+        $stmt->bind_param("si", $name, $user_id);
+        return $stmt->execute();
     }
 
     // READ
     public function getCategoriesByUser($user_id) {
         $query = "SELECT * FROM categories WHERE user_id = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->execute([$user_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     // UPDATE
     public function updateCategory($id, $name, $user_id) {
-        $query = "UPDATE categories SET category_name = ? 
-                  WHERE category_id = ? AND user_id = ?";
+        $query = "UPDATE categories SET cat_name = ? WHERE cat_id = ? AND user_id = ?";
         $stmt = $this->conn->prepare($query);
-        return $stmt->execute([$name, $id, $user_id]);
+        $stmt->bind_param("sii", $name, $id, $user_id);
+        return $stmt->execute();
     }
 
     // DELETE
     public function deleteCategory($id, $user_id) {
-        $query = "DELETE FROM categories WHERE category_id = ? AND user_id = ?";
+        $query = "DELETE FROM categories WHERE cat_id = ? AND user_id = ?";
         $stmt = $this->conn->prepare($query);
-        return $stmt->execute([$id, $user_id]);
+        $stmt->bind_param("ii", $id, $user_id);
+        return $stmt->execute();
     }
 }
