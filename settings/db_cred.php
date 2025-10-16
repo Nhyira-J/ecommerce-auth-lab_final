@@ -3,7 +3,7 @@
 
 define ("SERVER", "localhost");
 define ("USERNAME", "root");
-define ("PASSWD", "");
+define ("PASSWD", "Wat_again143");
 define ("DATABASE", "dbforlab");
 
 ?>
