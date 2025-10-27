@@ -14,7 +14,6 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $name = trim($_POST['name'] ?? '');
-$user_id = $_SESSION['user_id'];
 
 if (empty($name)) {
     echo json_encode(['status' => 'error', 'message' => 'Category name required']);
@@ -22,7 +21,7 @@ if (empty($name)) {
 }
 
 $controller = new CategoryController($conn);
-$success = $controller->add_category_ctr($name, $user_id);
+$success = $controller->add_category_ctr($name); // REMOVED $user_id parameter
 
 if ($success) {
     echo json_encode(['status' => 'success', 'message' => 'Category added']);

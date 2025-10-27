@@ -1,5 +1,5 @@
 <?php
-require_once '../classes/category_class.php';
+require_once __DIR__ . '/../classes/category_class.php';
 
 class CategoryController {
     private $category;
@@ -9,22 +9,22 @@ class CategoryController {
     }
 
     // CREATE
-    public function add_category_ctr($name, $user_id) {
-        return $this->category->addCategory($name, $user_id);
+    public function add_category_ctr($name) {
+        return $this->category->addCategory($name);
     }
 
     // READ
-    public function get_categories_ctr($user_id) {
-        return $this->category->getCategoriesByUser($user_id);
+    public function get_categories_ctr() {
+        return $this->category->getAllCategories();
     }
 
     // UPDATE
-    public function update_category_ctr($id, $newName, $user_id) {
-        return $this->category->updateCategory($id, $newName, $user_id);
+    public function update_category_ctr($id, $newName) {
+        return $this->category->updateCategory($id, $newName);
     }
 
     // DELETE
-    public function delete_category_ctr($id, $user_id) {
-        return $this->category->deleteCategory($id, $user_id);
+    public function delete_category_ctr($id) {
+        return $this->category->deleteCategory($id);
     }
 }

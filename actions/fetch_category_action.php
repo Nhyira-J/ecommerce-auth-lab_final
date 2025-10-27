@@ -13,10 +13,8 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$user_id = $_SESSION['user_id'];
-
 $controller = new CategoryController($conn);
-$categories = $controller->get_categories_ctr($user_id);
+$categories = $controller->get_categories_ctr(); // REMOVED $user_id
 
 if ($categories && count($categories) > 0) {
     echo json_encode(['status' => 'success', 'data' => $categories]);

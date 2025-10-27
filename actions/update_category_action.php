@@ -14,16 +14,15 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $id = intval($_POST['id'] ?? 0);
-$newName = trim($_POST['name'] ?? '');
-$user_id = $_SESSION['user_id'];
+$name = trim($_POST['name'] ?? '');
 
-if ($id <= 0 || empty($newName)) {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid input']);
+if ($id <= 0 || empty($name)) {
+    echo json_encode(['status' => 'error', 'message' => 'ID and name required']);
     exit;
 }
 
 $controller = new CategoryController($conn);
-$success = $controller->update_category_ctr($id, $newName, $user_id);
+$success = $controller->update_category_ctr($id, $name); // REMOVED $user_id
 
 if ($success) {
     echo json_encode(['status' => 'success', 'message' => 'Category updated']);

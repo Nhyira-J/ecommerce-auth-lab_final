@@ -14,7 +14,6 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $id = intval($_POST['id'] ?? 0);
-$user_id = $_SESSION['user_id'];
 
 if ($id <= 0) {
     echo json_encode(['status' => 'error', 'message' => 'Category ID required']);
@@ -22,7 +21,7 @@ if ($id <= 0) {
 }
 
 $controller = new CategoryController($conn);
-$success = $controller->delete_category_ctr($id, $user_id);
+$success = $controller->delete_category_ctr($id); // REMOVED $user_id
 
 if ($success) {
     echo json_encode(['status' => 'success', 'message' => 'Category deleted']);
