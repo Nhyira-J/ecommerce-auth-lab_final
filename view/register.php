@@ -34,7 +34,7 @@
 
   <div class="form-group">
     <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
+    <input type="password" name="password" id="password" required autocomplete="new-password" data-lpignore="true">
   </div>
 
   <div class="form-group">
