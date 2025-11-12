@@ -111,7 +111,8 @@ $brands = $brandCtrl->get_brands_ctr();
     <h2>ShopPN</h2>
     <div class="menu">
       <a href="index.php">Home</a>
-      <a href="view/all_product.php">All Products</a>
+      <a href="view/all_products.php">All Products</a>
+      <a href="view/cart.php">🛒 Cart</a>
       
       <?php if ($loggedIn): ?>
         <span>Welcome, <?= htmlspecialchars($name) ?></span>

@@ -1,4 +1,14 @@
+
 <?php
+
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$loggedIn = isset($_SESSION['user_id']);
+$role = $_SESSION['role'] ?? null;
+$name = $_SESSION['name'] ?? 'Guest';
+
 require_once __DIR__ . '/../functions/db.php';
 require_once __DIR__ . '/../controllers/product_controller.php';
 require_once __DIR__ . '/../controllers/category_controller.php';
@@ -65,9 +75,23 @@ $totalPages = ceil($totalProducts / $limit);
         <h2>ShopPN</h2>
         <div class="menu">
             <a href="../index.php">Home</a>
-            <a href="all_products.php">All Products</a>
+            <a href="cart.php">🛒 Cart</a>
+
+            <?php if ($loggedIn): ?>
+            <span class="nav-welcome">Welcome, <?= htmlspecialchars($name) ?></span>
+            
+            <?php if ($role == 1): ?>
+                <a href="../admin/category.php">Categories</a>
+                <a href="../admin/brand.php">Brands</a>
+                <a href="../admin/product.php">Products</a>
+            <?php endif; ?>
+            
+            <a href="../actions/logout_action.php" class="primary-btn small danger">Logout</a>
+        <?php else: ?>
             <a href="register.php">Register</a>
-            <a href="login.php">Login</a>
+            <a href="login.php" class="primary-btn small">Login</a>
+        <?php endif; ?> 
+
         </div>
     </div>
 
@@ -136,8 +160,10 @@ $totalPages = ceil($totalProducts / $limit);
                             Brand: <?= htmlspecialchars($product['brand_name'] ?? 'N/A') ?>
                         </p>
 
-                        <button class="add-to-cart-btn" onclick="alert('Add to cart functionality coming soon!')">
-                            Add to Cart
+                        <button class="add-to-cart-btn" 
+                            data-product-id="<?= $product['product_id'] ?>"
+                            onclick="addToCart(this)">
+                          Add to Cart
                         </button>
                     </div>
                 <?php endforeach; ?>
@@ -153,5 +179,44 @@ $totalPages = ceil($totalProducts / $limit);
             </div>
         <?php endif; ?>
     </div>
+
+    <script>
+async function addToCart(button) {
+    const productId = button.dataset.productId;
+    button.disabled = true;
+    button.textContent = 'Adding...';
+
+    try {
+        const response = await fetch('../actions/add_to_cart_action.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `product_id=${productId}&qty=1`
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            button.textContent = '✓ Added';
+            setTimeout(() => {
+                button.textContent = 'Add to Cart';
+                button.disabled = false;
+            }, 2000);
+            
+            // Show success message
+            alert(data.message);
+        } else {
+            alert(data.message || 'Failed to add to cart');
+            button.textContent = 'Add to Cart';
+            button.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Network error occurred');
+        button.textContent = 'Add to Cart';
+        button.disabled = false;
+    }
+}
+</script>
+
 </body>
 </html>

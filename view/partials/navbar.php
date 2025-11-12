@@ -14,7 +14,7 @@ $userName = $_SESSION['user_name'] ?? ($_SESSION['name'] ?? 'Guest');
   </div>
 
   <div class="nav-center">
-    <form id="navSearchForm" action="/mvc_skeleton_template/view/all_product.php" method="get" class="nav-search">
+    <form id="navSearchForm" action="/mvc_skeleton_template/view/all_products.php" method="get" class="nav-search">
       <input type="hidden" name="action" value="search">
       <input id="navSearchInput" name="q" type="search" placeholder="Search products..." aria-label="Search products">
       <button type="submit" class="primary-btn small">Search</button>
@@ -30,14 +30,14 @@ $userName = $_SESSION['user_name'] ?? ($_SESSION['name'] ?? 'Guest');
         <a href="/mvc_skeleton_template/view/admin/brand.php" class="primary-btn small">Brands</a>
         <a href="/mvc_skeleton_template/view/admin/product.php" class="primary-btn small">Products</a>
       <?php else: ?>
-        <a href="/mvc_skeleton_template/view/all_product.php" class="primary-btn small">All Products</a>
+        <a href="/mvc_skeleton_template/view/all_products.php" class="primary-btn small">All Products</a>
         <!-- optional: cart link -->
         <a href="/mvc_skeleton_template/view/cart.php" class="primary-btn small">Cart</a>
       <?php endif; ?>
 
       <a href="/mvc_skeleton_template/actions/logout_action.php" class="primary-btn small danger">Logout</a>
     <?php else: ?>
-      <a href="/mvc_skeleton_template/view/all_product.php" class="primary-btn small">All Products</a>
+      <a href="/mvc_skeleton_template/view/all_products.php" class="primary-btn small">All Products</a>
       <a href="/mvc_skeleton_template/view/register.php" class="primary-btn small">Register</a>
       <a href="/mvc_skeleton_template/view/login.php" class="primary-btn small">Login</a>
     <?php endif; ?>

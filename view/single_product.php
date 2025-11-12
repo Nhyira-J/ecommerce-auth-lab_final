@@ -1,4 +1,12 @@
 <?php
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$loggedIn = isset($_SESSION['user_id']);
+$role = $_SESSION['role'] ?? null;
+$name = $_SESSION['name'] ?? 'Guest';
+
 require_once __DIR__ . '/../functions/db.php';
 require_once __DIR__ . '/../controllers/product_controller.php';
 
@@ -48,14 +56,30 @@ if (!$product) {
         <h2>ShopPN</h2>
         <div class="menu">
             <a href="../index.php">Home</a>
-            <a href="all_product.php">All Products</a>
+            <a href="all_products.php">All Products</a>
+            <a href="cart.php">🛒 Cart</a>
+           
+
+            <?php if ($loggedIn): ?>
+            <span class="nav-welcome">Welcome, <?= htmlspecialchars($name) ?></span>
+            
+            <?php if ($role == 1): ?>
+                <a href="../admin/category.php">Categories</a>
+                <a href="../admin/brand.php">Brands</a>
+                <a href="../admin/product.php">Products</a>
+            <?php endif; ?>
+            
+            <a href="../actions/logout_action.php" class="primary-btn small danger">Logout</a>
+        <?php else: ?>
             <a href="register.php">Register</a>
-            <a href="login.php">Login</a>
+            <a href="login.php" class="primary-btn small">Login</a>
+        <?php endif; ?>
+
         </div>
     </div>
 
     <div class="product-detail-container">
-        <a href="all_product.php" class="back-link">← Back to All Products</a>
+        <a href="all_products.php" class="back-link">← Back to All Products</a>
 
         <div class="product-detail">
             <div class="product-image-section">
@@ -95,11 +119,60 @@ if (!$product) {
                     </div>
                 <?php endif; ?>
 
-                <button class="add-to-cart-large" onclick="alert('Add to cart functionality coming soon!')">
-                    Add to Cart
-                </button>
+                <div style="display: flex; gap: 10px; align-items: center; margin-top: 20px;">
+                    <label for="qty">Quantity:</label>
+                    <input type="number" id="qty" value="1" min="1" style="width: 80px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    <button class="add-to-cart-large" 
+                        data-product-id="<?= $product['product_id'] ?>"
+                        onclick="addToCart(this)">
+                      Add to Cart
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+    
+    <script>
+async function addToCart(button) {
+    const productId = button.dataset.productId;
+    const qty = parseInt(document.getElementById('qty').value);
+
+    if (qty < 1) {
+        alert('Quantity must be at least 1');
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = 'Adding...';
+
+    try {
+        const response = await fetch('../actions/add_to_cart_action.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `product_id=${productId}&qty=${qty}`
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            button.textContent = '✓ Added to Cart';
+            alert(data.message + '\nGo to cart to checkout.');
+            setTimeout(() => {
+                button.textContent = 'Add to Cart';
+                button.disabled = false;
+            }, 2000);
+        } else {
+            alert(data.message || 'Failed to add to cart');
+            button.textContent = 'Add to Cart';
+            button.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Network error occurred');
+        button.textContent = 'Add to Cart';
+        button.disabled = false;
+    }
+}
+</script>
 </body>
 </html>
