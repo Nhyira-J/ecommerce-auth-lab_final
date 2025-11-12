@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
 
       if (data.status === 'success') {
-    window.location.href = '/mvc_skeleton_template/index.php'; 
+    window.location.href = '../index.php'; 
     } else {
     msg.textContent = data.message || 'Login failed';
     }
